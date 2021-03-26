@@ -1,4 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { userLogin } from './authSlice';
 
 const initialValues = {
   login: '',
@@ -56,6 +57,12 @@ const loginFormSlice = createSlice({
     }
   },
   extraReducers: {
+    [userLogin.fulfilled]: (state, action) => {
+      console.log('[loginForm] [userLogin.rejected] payload: ', action.payload);
+    },
+    [userLogin.rejected]: (state, action) => {
+      console.log('[loginForm] [userLogin.rejected] payload: ', action.payload);
+    },
   },
 });
 

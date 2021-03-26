@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
-import useAuth from '../../hooks/useAuth.js';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory, useLocation } from 'react-router';
 import { changeField, invalidateField, validateForm } from '../../store/loginFormSlice';
+import { userLogin, readProfile } from '../../store/authSlice';
 
 function LoginForm() {
   const { values, validation, validated } = useSelector((state) => state.loginForm);
+  const { token, profile, error } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const { profile, error, logIn } = useAuth();
+  let history = useHistory();
 
   const handleChange = (e) => {
     dispatch(changeField({ name: e.target.name, value: e.target.value }));
@@ -27,7 +29,20 @@ function LoginForm() {
 
     dispatch(validateForm());
 
-    logIn(values.login, values.password);
+    dispatch(userLogin({ login: values.login, password: values.password }))
+      .then((result) => {
+        if (result.type === 'userLogin/fulfilled') {
+          return dispatch(readProfile());
+        } else {
+          throw new Error(result.error.message);
+        }
+      })
+      .then((result) => {
+      // perform redirect
+      })
+      .catch(() => {
+        console.log('catch error: ', error);
+      });
   }
 
   if (profile) {
