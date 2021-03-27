@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import LoginForm from '../LoginForm/LoginForm.jsx';
-import UserProfile from '../UserProfile/UserProfile.jsx';
+import LoginForm from './LoginForm.jsx';
+import UserProfile from './UserProfile.jsx';
 
 function Header() {
   return (

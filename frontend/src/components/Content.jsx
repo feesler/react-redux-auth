@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Banner from '../Banner/Banner.jsx';
-import NewsList from '../NewsList/NewsList.jsx';
-import Page404 from '../Page404/Page404.jsx';
+import Banner from './Banner.jsx';
+import NewsList from './NewsList.jsx';
+import Page404 from './Page404.jsx';
 
 function Content() {
   return (

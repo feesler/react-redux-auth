@@ -1,8 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeField, invalidateField, validateForm } from '../../store/loginFormSlice';
-import { userLogin } from '../../store/authSlice';
+import { changeField, invalidateField, validateForm } from '../store/loginFormSlice';
+import { userLogin } from '../store/authSlice';
 
 function LoginForm() {
   const { values, validation, validated, error } = useSelector((state) => state.loginForm);

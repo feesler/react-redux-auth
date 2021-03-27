@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { readNews } from '../../store/newsSlice';
-import Card from '../Card/Card.jsx';
+import { readNews } from '../store/newsSlice';
+import Card from './Card.jsx';
 
 
 function NewsList() {
