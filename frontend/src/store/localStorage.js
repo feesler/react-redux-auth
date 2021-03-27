@@ -12,8 +12,12 @@ export const loadState = (key) => {
 
 export const saveState = (key, value) => {
   try {
-    const serialized = JSON.stringify(value);
-    localStorage.setItem(key, serialized);
+    if (value === null) {
+      localStorage.removeItem(key);
+    } else {
+      const serialized = JSON.stringify(value);
+      localStorage.setItem(key, serialized);
+    }
   } catch (err) {
     // Ignore write errors.
   }
