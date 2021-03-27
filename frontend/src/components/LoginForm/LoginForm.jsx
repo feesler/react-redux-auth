@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory, useLocation } from 'react-router';
 import { changeField, invalidateField, validateForm } from '../../store/loginFormSlice';
-import { userLogin, readProfile } from '../../store/authSlice';
+import { userLogin } from '../../store/authSlice';
 
 function LoginForm() {
-  const { values, validation, validated } = useSelector((state) => state.loginForm);
-  const { token, profile, error } = useSelector((state) => state.auth);
+  const { values, validation, validated, error } = useSelector((state) => state.loginForm);
+  const { profile } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  let history = useHistory();
 
   const handleChange = (e) => {
     dispatch(changeField({ name: e.target.name, value: e.target.value }));
@@ -28,21 +26,7 @@ function LoginForm() {
     }
 
     dispatch(validateForm());
-
-    dispatch(userLogin({ login: values.login, password: values.password }))
-      .then((result) => {
-        if (result.type === 'userLogin/fulfilled') {
-          return dispatch(readProfile());
-        } else {
-          throw new Error(result.error.message);
-        }
-      })
-      .then((result) => {
-      // perform redirect
-      })
-      .catch(() => {
-        console.log('catch error: ', error);
-      });
+    dispatch(userLogin({ login: values.login, password: values.password }));
   }
 
   if (profile) {

@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authSlice from './authSlice';
 import loginFormSlice from './loginFormSlice';
+import newsSlice from './newsSlice';
 import { throttle } from 'lodash';
 import { loadState, saveState } from './localStorage';
 
@@ -13,8 +14,9 @@ const preloadedState = {
 
 const store = configureStore({
   reducer: {
-    loginForm: loginFormSlice,
     auth: authSlice,
+    loginForm: loginFormSlice,
+    news: newsSlice,
   },
   preloadedState,
 });

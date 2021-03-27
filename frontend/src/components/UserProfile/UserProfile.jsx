@@ -1,8 +1,14 @@
 import React from 'react';
-import useAuth from '../../hooks/useAuth.js';
+import { useSelector, useDispatch } from 'react-redux';
+import { logOut } from '../../store/authSlice';
 
 function UserProfile() {
-  const { profile, logOut } = useAuth();
+  const dispatch = useDispatch();
+  const { profile } = useSelector((state) => state.auth);
+
+  const handleLogOut = () => {
+    dispatch(logOut());
+  }
 
   if (!profile) {
     return null;
@@ -12,7 +18,7 @@ function UserProfile() {
     <div className="profile">
       <div>Hello, {profile.name}</div>
       <div className="profile__avatar"><img src={profile.avatar} alt={profile.name}/></div>
-      <button className="btn btn-outline-danger" type="button" onClick={logOut}>Logout</button>
+      <button className="btn btn-outline-danger" type="button" onClick={handleLogOut}>Logout</button>
     </div>
   )
 }

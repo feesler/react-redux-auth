@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { userLogin } from './authSlice';
 
 const initialValues = {
@@ -15,6 +15,7 @@ const initialState = {
   values: { ...initialValues },
   validation: { ...initialValidation },
   validated: false,
+  error: null,
 };
 
 const loginFormSlice = createSlice({
@@ -31,6 +32,7 @@ const loginFormSlice = createSlice({
         },
         validation: { ...initialValidation },
         validated: false,
+        error: null,
       };
     },
 
@@ -57,14 +59,22 @@ const loginFormSlice = createSlice({
     }
   },
   extraReducers: {
-    [userLogin.fulfilled]: (state, action) => {
-      console.log('[loginForm] [userLogin.rejected] payload: ', action.payload);
+    [userLogin.fulfilled]: () => {
+      return { ...initialState };
     },
     [userLogin.rejected]: (state, action) => {
-      console.log('[loginForm] [userLogin.rejected] payload: ', action.payload);
+      return {
+        ...state,
+        error: (action.error) ? action.error.message : 'Unknown error',
+      };
     },
   },
 });
 
-export const { changeField, resetForm, invalidateField, validateForm } = loginFormSlice.actions;
+export const {
+  changeField,
+  resetForm,
+  invalidateField,
+  validateForm,
+} = loginFormSlice.actions;
 export default loginFormSlice.reducer;

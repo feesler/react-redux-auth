@@ -1,38 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import useAuth from '../../hooks/useAuth.js';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { readNews } from '../../store/newsSlice';
 import Card from '../Card/Card.jsx';
 
-const newsUrl = process.env.REACT_APP_NEWS_URL;
 
 function NewsList() {
-  const { profile, sendRequest } = useAuth();
-  const [news, setNews] = useState([]);
+  const { profile } = useSelector((state) => state.auth);
+  const { items } = useSelector((state) => state.news);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    let canceled = false;
-
-    const requestNews = async () => {
-      if (!canceled) {
-        setNews([]);
-      }
-
-      const result = await sendRequest(newsUrl);
-      if (!canceled && result) {
-        if (Array.isArray(result.data)) {
-          setNews([...result.data]);
-        } else {
-          setNews(null);
-        }
-      }
-    }
-
     if (profile) {
-      requestNews();
+      dispatch(readNews());
     }
-
-    return () => { canceled = true; };
-  }, [profile, sendRequest]);
+  }, [profile, dispatch]);
 
   if (!profile) {
     return null;
@@ -40,10 +21,8 @@ function NewsList() {
 
   return (
     <div className="news-list">
-      { news.map((item) =>
-        <Link key={item.id} to={`/news/${item.id}`} className="card-link">
-          <Card {...item} />
-        </Link>
+      { items.map((item) =>
+        <Card key={item.id} {...item} />
       )}
     </div>
   )

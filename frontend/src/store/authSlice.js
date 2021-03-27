@@ -1,18 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const initialState = {
-  token: null,
-  profile: null,
-};
-
 const authURL = process.env.REACT_APP_AUTH_URL;
 const profileURL = process.env.REACT_APP_PROFILE_URL;
 
 export const userLogin = createAsyncThunk(
   'userLogin',
-  async ({ login, password }, thunkAPI) => {
-    console.log('userLogin() login: ', login, ' password: ', password);
-
+  async ({ login, password }) => {
     const response = await fetch(authURL, {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
@@ -34,18 +27,14 @@ export const userLogin = createAsyncThunk(
 
 export const authRequest = createAsyncThunk(
   'authRequest',
-  async ({ url, opts = {} }, { dispatch, getState }) => {
-    console.log('inside authRequest(): url=', url);
-
+  async ({ url, opts = {} }, { getState }) => {
     const state = getState();
-    const token = state.auth.token;
-
-    if (!token) {
+    if (!state.auth || !state.auth.token) {
       throw new Error('Not authorised');
     }
 
     const defaultOpts = {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${state.auth.token}` },
     };
 
     const response = await fetch(url, {
@@ -54,7 +43,6 @@ export const authRequest = createAsyncThunk(
     });
 
     if (response.status === 401) {
-      //dispatch(logOut());
       throw new Error('Not authorised');
     }
 
@@ -75,11 +63,8 @@ export const authRequest = createAsyncThunk(
 export const readProfile = createAsyncThunk(
   'readProfile',
   async (_, { dispatch }) => {
-    console.log('inside readProfile thunk');
-
     const result = await dispatch(authRequest({ url: profileURL }));
-    console.log('after ... result: ', result);
-    if (!result.payload.data) {
+    if (!result.payload || !result.payload.data) {
       throw new Error((result.error) ? result.error.message : 'Unknown error');
     }
 
@@ -87,6 +72,11 @@ export const readProfile = createAsyncThunk(
   },
 );
 
+const initialState = {
+  token: null,
+  profile: null,
+  error: null,
+};
 
 const authSlice = createSlice({
   name: 'auth',
@@ -97,36 +87,29 @@ const authSlice = createSlice({
     }
   },
   extraReducers: {
-    [userLogin.pending]: (state, action) => {
-      console.log('[userLogin.pending] action: ', action);
-      state.token = null;
-      state.profile = null;
-      state.error = null;
+    [userLogin.pending]: () => {
+      return { ...initialState };
     },
     [userLogin.fulfilled]: (state, action) => {
-      console.log('[userLogin.fulfilled] action: ', action);
-      state.token = action.payload;
+      return {
+        ...state,
+        token: action.payload,
+      };
     },
     [userLogin.rejected]: (state, action) => {
-      console.log('[userLogin.rejected] action: ', action);
-      state.token = null;
-      state.profile = null;
-      state.error = (action.error) ? action.error.message : 'Error';
+      return {
+        ...state,
+        token: null,
+        profile: null,
+        error: (action.error) ? action.error.message : 'Error',
+      };
     },
 
     [readProfile.fulfilled]: (state, action) => {
-      console.log('[readProfile.fulfilled] payload: ', action.payload);
-      state.profile = action.payload;
-    },
-
-    [authRequest.pending]: (state, action) => {
-      console.log('[authRequest.pending] payload: ', action.payload);
-    },
-    [authRequest.fulfilled]: (state, action) => {
-      console.log('[authRequest.fulfilled] payload: ', action.payload);
-    },
-    [authRequest.rejected]: (state, action) => {
-      console.log('[authRequest.rejected] payload: ', action.payload);
+      return {
+        ...state,
+        profile: action.payload,
+      };
     },
   },
 });
