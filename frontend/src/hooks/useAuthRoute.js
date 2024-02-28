@@ -1,24 +1,24 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory, useLocation } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import { readProfile, logOut } from '../store/authSlice';
 
 export default function useAuthRoute() {
   const { token, profile } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const location = useLocation();
-  let history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (location.pathname === '/') {
       if (token) {
-        history.replace('/news');
+        navigate.replace('/news');
       }
       return;
     } else {
       if (!token) {
         dispatch(logOut());
-        history.replace('/');
+        navigate.replace('/');
         return;
       }
     }
