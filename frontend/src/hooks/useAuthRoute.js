@@ -12,13 +12,13 @@ export default function useAuthRoute() {
   useEffect(() => {
     if (location.pathname === '/') {
       if (token) {
-        navigate.replace('/news');
+        navigate('/news');
       }
       return;
     } else {
       if (!token) {
         dispatch(logOut());
-        navigate.replace('/');
+        navigate('/');
         return;
       }
     }

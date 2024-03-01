@@ -5,15 +5,15 @@ import NewsList from './NewsList.jsx';
 import Page404 from './Page404.jsx';
 
 function Content() {
-  return (
-    <div className="content">
-      <Routes>
-        <Route path="/" exact component={Banner} />
-        <Route path="/news" exact component={NewsList} />
-        <Route component={Page404} />
-      </Routes>
-    </div>
-  )
+    return (
+        <div className="content">
+            <Routes>
+                <Route path="/" Component={Banner} />
+                <Route path="/news" Component={NewsList} />
+                <Route path="/*" Component={Page404} />
+            </Routes>
+        </div>
+    );
 }
 
 export default Content;
