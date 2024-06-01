@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { authRequest } from './authSlice';
+import { authRequest } from './authSlice.js';
 
 const newsUrl = process.env.REACT_APP_NEWS_URL;
 

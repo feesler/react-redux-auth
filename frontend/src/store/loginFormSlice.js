@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { userLogin } from './authSlice';
+import { userLogin } from './authSlice.js';
 
 const initialValues = {
   login: '',

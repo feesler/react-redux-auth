@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { logOut } from '../store/authSlice';
+import { logOut } from '../store/authSlice.js';
 
 function UserProfile() {
   const dispatch = useDispatch();

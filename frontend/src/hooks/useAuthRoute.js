@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router';
-import { readProfile, logOut } from '../store/authSlice';
+import { readProfile, logOut } from '../store/authSlice.js';
 
 export default function useAuthRoute() {
   const { token, profile } = useSelector((state) => state.auth);

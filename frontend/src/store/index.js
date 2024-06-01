@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authSlice from './authSlice';
-import loginFormSlice from './loginFormSlice';
-import newsSlice from './newsSlice';
+import authSlice from './authSlice.js';
+import loginFormSlice from './loginFormSlice.js';
+import newsSlice from './newsSlice.js';
 import { throttle } from 'lodash';
-import { loadState, saveState } from './localStorage';
+import { loadState, saveState } from './localStorage.js';
 
 const preloadedState = {
   auth: {
